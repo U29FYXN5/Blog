@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: Tucao | MAMA ZAI YE BU YONG DAN XIN WO DE XUE XI LE</title>
+  <title>Archives: 2015/3 | MAMA ZAI YE BU YONG DAN XIN WO DE XUE XI LE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="MAMA ZAI YE BU YONG DAN XIN WO DE XUE XI LE">
-<meta property="og:url" content="http://u29fyxn5.github.io/Blog/tags/Tucao/">
+<meta property="og:url" content="http://u29fyxn5.github.io/Blog/archives/2015/03/">
 <meta property="og:site_name" content="MAMA ZAI YE BU YONG DAN XIN WO DE XUE XI LE">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -63,10 +63,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-OT-Tomorrow" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Import-java-pkcs-8-private-key-plus-accompanied-certificate-to-keystore" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/Blog/2015/02/06/OT-Tomorrow/" class="article-date">
-  <time datetime="2015-02-06T11:25:54.000Z" itemprop="datePublished">2月 6 2015</time>
+    <a href="/Blog/2015/03/18/Import-java-pkcs-8-private-key-plus-accompanied-certificate-to-keystore/" class="article-date">
+  <time datetime="2015-03-18T11:19:42.000Z" itemprop="datePublished">3月 18 2015</time>
 </a>
     
   </div>
@@ -77,7 +77,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/Blog/2015/02/06/OT-Tomorrow/">OT Tomorrow</a>
+      <a class="article-title" href="/Blog/2015/03/18/Import-java-pkcs-8-private-key-plus-accompanied-certificate-to-keystore/">Import java pkcs#8 private key plus accompanied certificate to keystore</a>
     </h1>
   
 
@@ -85,16 +85,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight Java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">System.out.println(<span class="string">"Ming tian yao jia ban ~.~"</span>);</div></pre></td></tr></table></figure>
+        <p>Import java pkcs#8 private key plus accompanied certificate to keystore</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Certificate cert = certFactory</div><div class="line">        .generateCertificate(<span class="keyword">new</span> ByteArrayInputStream(abCert));</div><div class="line">System.out.println(cert.getType());</div><div class="line">System.out.println(cert.toString());</div><div class="line">OutputStream os = <span class="keyword">new</span> FileOutputStream(<span class="string">"resource/jetty.cer"</span>);</div><div class="line">os.write(cert.getEncoded());</div><div class="line">os.close();</div><div class="line"></div><div class="line">KeyFactory keyFactory = KeyFactory.getInstance(<span class="string">"RSA"</span>);</div><div class="line"><span class="keyword">final</span> PKCS8EncodedKeySpec keySpec = <span class="keyword">new</span> PKCS8EncodedKeySpec(abKey);         </div><div class="line">PrivateKey privateKey = keyFactory.generatePrivate(keySpec);</div><div class="line">os = <span class="keyword">new</span> FileOutputStream(<span class="string">"resource/jetty.key.der"</span>);</div><div class="line">os.write(privateKey.getEncoded());</div><div class="line">os.close();</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">openssl pkcs8 -nocrypt -inform der -in jetty.key.der -out jetty.key.pem</div><div class="line"></div><div class="line">openssl pkcs12 -export -inkey jetty.key.pem -in jetty.cer -out jetty.p12 -name jetty -password changeit</div><div class="line"></div><div class="line">keytool -importkeystore -srckeystore jetty.p12 -srcstoretype pkcs12 -srcstorepass changeit -destkeystore jetty.keystore</div></pre></td></tr></table></figure>
+
+<p>Using java code to finish the same task</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">KeyStore jettyKeyStore = KeyStore.getInstance(<span class="string">"JKS"</span>);</div><div class="line">jettyKeyStore.load(<span class="keyword">null</span>, PASSWORD); <span class="comment">// Initialize</span></div><div class="line"><span class="keyword">final</span> Certificate[] certChain = <span class="keyword">new</span> Certificate[] { cert };</div><div class="line">jettyKeyStore.setKeyEntry(ALIAS, privateKey, PASSWORD, certChain);</div><div class="line">OutputStream stream = <span class="keyword">new</span> FileOutputStream(<span class="string">"resource/jetty.jks"</span>);</div><div class="line">jettyKeyStore.store(stream, PASSWORD);</div><div class="line">stream.close();</div></pre></td></tr></table></figure>
 
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://u29fyxn5.github.io/2015/02/06/OT-Tomorrow/" data-id="twgp3nipxqbif491" class="article-share-link">Share</a>
+      <a data-url="http://u29fyxn5.github.io/2015/03/18/Import-java-pkcs-8-private-key-plus-accompanied-certificate-to-keystore/" data-id="p4oifkr1xboxl94g" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/Blog/tags/Tucao/">Tucao</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/Blog/tags/Java/">Java</a></li></ul>
 
     </footer>
   </div>
